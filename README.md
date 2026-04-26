@@ -406,12 +406,6 @@ JOIN addresses a ON o.address_id = a.id;
 
 This project is built for learning and demonstration purposes.
 
----
 
-## 👩‍💻 Author
-
-**Monika D A**
-
----
 
  If you like this project, give it a star!
