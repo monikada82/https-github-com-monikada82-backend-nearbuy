@@ -50,14 +50,21 @@ public class CartServiceImpl implements CartService {
                 .findFirst()
                 .orElse(null);
 
+        int requestedQuantity = request.getQuantity();
+        int currentQuantity = existingItem == null ? 0 : existingItem.getQuantity();
+
+        if (currentQuantity + requestedQuantity > product.getStock()) {
+            throw new BadRequestException("Requested quantity exceeds available stock");
+        }
+
         if (existingItem != null) {
             //  update quantity
-            existingItem.setQuantity(existingItem.getQuantity() + request.getQuantity());
+            existingItem.setQuantity(currentQuantity + requestedQuantity);
         } else {
             // create new item
             CartItem newItem = CartItem.builder()
                     .product(product)
-                    .quantity(request.getQuantity())
+                    .quantity(requestedQuantity)
                     .cart(cart)
                     .build();
 
@@ -102,9 +109,12 @@ public class CartServiceImpl implements CartService {
 
         List<CartItemResponse> items = cart.getItems().stream()
                 .map(item -> CartItemResponse.builder()
+                        .cartItemId(item.getId())
+                        .productId(item.getProduct().getId())
                         .productName(item.getProduct().getName())
                         .quantity(item.getQuantity())
                         .price(item.getProduct().getPrice())
+                        .lineTotal(item.getProduct().getPrice() * item.getQuantity())
                         .build())
                 .toList();
 

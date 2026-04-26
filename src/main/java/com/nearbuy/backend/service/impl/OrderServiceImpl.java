@@ -3,6 +3,7 @@ package com.nearbuy.backend.service.impl;
 import com.nearbuy.backend.dto.order.OrderResponse;
 import com.nearbuy.backend.entity.*;
 import com.nearbuy.backend.enums.OrderStatus;
+import com.nearbuy.backend.exception.BadRequestException;
 import com.nearbuy.backend.exception.ResourceNotFoundException;
 import com.nearbuy.backend.repository.AddressRepository;
 import com.nearbuy.backend.repository.CartRepository;
@@ -10,6 +11,7 @@ import com.nearbuy.backend.repository.OrderRepository;
 import com.nearbuy.backend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
     private final AddressRepository addressRepository;
 
     @Override
+    @Transactional
     public OrderResponse checkout(Long userId, Long addressId) {
 
 
@@ -29,13 +32,26 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
 
         if (cart.getItems().isEmpty()) {
-            throw new RuntimeException("Cart is empty");
+            throw new BadRequestException("Cart is empty");
         }
 
 
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
 
+        if (!address.getUserId().equals(userId)) {
+            throw new BadRequestException("Address does not belong to current user");
+        }
+
+        cart.getItems().forEach(item -> {
+            Product product = item.getProduct();
+
+            if (item.getQuantity() > product.getStock()) {
+                throw new BadRequestException("Insufficient stock for product: " + product.getName());
+            }
+
+            product.setStock(product.getStock() - item.getQuantity());
+        });
 
         List<OrderItem> orderItems = cart.getItems().stream()
                 .map(item -> OrderItem.builder()

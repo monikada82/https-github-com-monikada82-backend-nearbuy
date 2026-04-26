@@ -9,9 +9,84 @@
     {
       "key": "baseUrl",
       "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
     }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
   "item": [
+
+    {
+      "name": "Auth APIs",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Demo User\",\n  \"email\": \"demo@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Category APIs",
+      "item": [
+        {
+          "name": "Add Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Electronics\"\n}"
+            },
+            "url": "{{baseUrl}}/categories"
+          }
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/categories"
+          }
+        }
+      ]
+    },
 
     {
       "name": "Product APIs",
@@ -54,21 +129,21 @@
               "mode": "raw",
               "raw": "{\n  \"productId\": 1,\n  \"quantity\": 2\n}"
             },
-            "url": "{{baseUrl}}/cart/1"
+            "url": "{{baseUrl}}/cart"
           }
         },
         {
           "name": "View Cart",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/cart/1"
+            "url": "{{baseUrl}}/cart"
           }
         },
         {
           "name": "Remove from Cart",
           "request": {
             "method": "DELETE",
-            "url": "{{baseUrl}}/cart/1/1"
+            "url": "{{baseUrl}}/cart/items/1"
           }
         }
       ]
@@ -88,14 +163,14 @@
               "mode": "raw",
               "raw": "{\n  \"street\": \"MG Road\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"zipCode\": \"560001\",\n  \"country\": \"India\"\n}"
             },
-            "url": "{{baseUrl}}/address/1"
+            "url": "{{baseUrl}}/address"
           }
         },
         {
           "name": "Get Addresses",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/address/1"
+            "url": "{{baseUrl}}/address"
           }
         }
       ]
@@ -115,14 +190,14 @@
               "mode": "raw",
               "raw": "{\n  \"addressId\": 1\n}"
             },
-            "url": "{{baseUrl}}/orders/checkout/1"
+            "url": "{{baseUrl}}/orders/checkout"
           }
         },
         {
           "name": "Get Orders",
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/orders/1"
+            "url": "{{baseUrl}}/orders"
           }
         },
         {
@@ -142,7 +217,7 @@
           "name": "Make Payment",
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/payments/1"
+            "url": "{{baseUrl}}/payments/1?successful=true"
           }
         }
       ]

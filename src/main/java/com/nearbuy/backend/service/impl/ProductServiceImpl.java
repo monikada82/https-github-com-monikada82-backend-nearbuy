@@ -87,6 +87,9 @@ public class ProductServiceImpl implements ProductService {
                 .name(p.getName())
                 .description(p.getDescription())
                 .price(p.getPrice())
+                .stock(p.getStock())
+                .categoryId(p.getCategory() == null ? null : p.getCategory().getId())
+                .categoryName(p.getCategory() == null ? null : p.getCategory().getName())
                 .build();
     }
 }

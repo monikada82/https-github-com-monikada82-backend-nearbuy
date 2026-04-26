@@ -34,13 +34,13 @@ NearBuy is a backend application that manages the complete lifecycle of an e-com
 
 ## Tech Stack
 
-* **Framework:** Spring Boot 3.x
-* **Language:** Java 17+
+* **Framework:** Spring Boot 4.x
+* **Language:** Java 21+
 * **Database:** PostgreSQL
 * **ORM:** Spring Data JPA / Hibernate
 * **Build Tool:** Maven
 * **API Testing:** Postman
-* **Documentation:** Swagger (OpenAPI)
+* **Documentation:** Swagger/OpenAPI + Postman collection
 
 ---
 
@@ -170,6 +170,25 @@ Controller → Service → Repository → Database
 
 ## 🔌 API Endpoints
 
+### Auth APIs
+
+```http
+POST /auth/register
+POST /auth/login
+```
+
+---
+
+### Category APIs
+
+```http
+POST /categories
+GET  /categories
+GET  /categories/{categoryId}
+```
+
+---
+
 ### Product APIs
 
 ```http
@@ -184,9 +203,9 @@ GET  /products/filter?min=1000&max=50000
 ### Cart APIs
 
 ```http
-POST   /cart/{userId}
-GET    /cart/{userId}
-DELETE /cart/{userId}/{itemId}
+POST   /cart
+GET    /cart
+DELETE /cart/items/{itemId}
 ```
 
 ---
@@ -194,8 +213,8 @@ DELETE /cart/{userId}/{itemId}
 ### Address APIs
 
 ```http
-POST /address/{userId}
-GET  /address/{userId}
+POST /address
+GET  /address
 ```
 
 ---
@@ -203,8 +222,8 @@ GET  /address/{userId}
 ### Order APIs
 
 ```http
-POST /orders/checkout/{userId}
-GET  /orders/{userId}
+POST /orders/checkout
+GET  /orders
 PUT  /orders/{orderId}/status?status=SHIPPED
 ```
 
@@ -213,7 +232,13 @@ PUT  /orders/{orderId}/status?status=SHIPPED
 ### Payment APIs
 
 ```http
-POST /payments/{orderId}
+POST /payments/{orderId}?successful=true
+```
+
+Except `/auth/register` and `/auth/login`, APIs require:
+
+```http
+Authorization: Bearer <jwt-token>
 ```
 
 ---
@@ -222,7 +247,7 @@ POST /payments/{orderId}
 
 ### Prerequisites
 
-* Java 17+
+* Java 21+
 * PostgreSQL
 * Maven
 
@@ -255,6 +280,18 @@ Application runs at:
 
 ```text
 http://localhost:8080
+```
+
+Swagger UI runs at:
+
+```text
+http://localhost:8080/swagger-ui.html
+```
+
+OpenAPI JSON runs at:
+
+```text
+http://localhost:8080/v3/api-docs
 ```
 
 ---
@@ -406,12 +443,6 @@ JOIN addresses a ON o.address_id = a.id;
 
 This project is built for learning and demonstration purposes.
 
----
 
-## 👩‍💻 Author
-
-**Monika D A**
-
----
 
  If you like this project, give it a star!
